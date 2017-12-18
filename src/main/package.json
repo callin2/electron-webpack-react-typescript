@@ -1,0 +1,14 @@
+{
+  "name": "bitnine electron boilerplate",
+  "productName": "bitnine electron boilerplate",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./main.js",
+  "author": {
+    "name": "RIM CHANGJIN",
+    "email": "callin2@gmail.com",
+    "url": "https://github.com/callin2"
+  },
+  "license": "MIT",
+  "dependencies": {}
+}

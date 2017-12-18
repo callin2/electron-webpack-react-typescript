@@ -1,0 +1,35 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "sourceMap": true,
+    "inlineSources": true,
+    "declaration": false,
+    "diagnostics": true,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictFunctionTypes": false,
+    "target": "ES2015",
+    "jsx": "react",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "ES2016",
+      "es5",
+      "dom"
+    ],
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "src/renderer/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*spec*"
+  ]
+}
+
+

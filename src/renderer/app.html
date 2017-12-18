@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        html,body,#app {
+            height: 100%;
+            margin: 0px;
+            padding: 0px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+    // __webpack_public_path__ = "http://webpack:4567/";
+
+    {
+        const scripts = [];
+        const port = process.env.PORT || 4567;
+        scripts.push(
+            (process.env.HOT)
+                ? 'http://localhost:' + port + '/dist/vendor.dev.js'
+                : './dist/vendor.prod.js'
+        );
+        scripts.push(
+            (process.env.HOT)
+                ? 'http://localhost:' + port + '/dist/app.dev.js'
+                : './dist/app.prod.js'
+        );
+        document.write(
+            scripts
+                .map(script => '<script defer src="' + script + '"><\/script>')
+                .join('')
+        );
+    }
+</script>
+</body>
+</html>
