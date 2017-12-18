@@ -5,8 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:main": "cross-env ./node_modules/.bin/webpack --config webpack.main.dev.config.js",
-    "build:renderer": "cross-env ./node_modules/.bin/webpack --config webpack.renderer.dev.config.js",
+    "build:dev": "cross-env  npm run build:main:dev && npm run build:renderer:dev",
+    "build:prod": "cross-env npm run build:main:prod && npm run build:renderer:prod",
+    "build:main:dev": "cross-env NODE_ENV=development ./node_modules/.bin/webpack --config webpack.main.dev.config.js",
+    "build:main:prod": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config webpack.main.dev.config.js",
+    "build:renderer:dev": "cross-env NODE_ENV=development ./node_modules/.bin/webpack --config webpack.renderer.dev.config.js",
+    "build:renderer:prod": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config webpack.renderer.dev.config.js",
     "start-main-dev": "cross-env HOT=1 NODE_ENV=development electron ./dist",
     "start-renderer-dev": "cross-env ./node_modules/.bin/webpack-dev-server --config webpack.renderer.dev.config.js --hot --inline"
   },
