@@ -29,7 +29,7 @@ class App extends React.Component<{},AppState> {
     }
 
     layout = [
-        {i: '', x: 0, y: 0, w: 2, h: 2, static: true},
+        {i: 'a', x: 0, y: 0, w: 2, h: 2, static: true},
         {i: 'b', x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4},
         {i: 'c', x: 4, y: 0, w: 1, h: 2}
     ];
@@ -47,54 +47,11 @@ class App extends React.Component<{},AppState> {
 
         return <div className='login-form' style={{height: '100%'}}>
 
-            <ReactGridLayout className="layout" layouts={this.layout}
-                                    breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
-                                    >
-                <div key="1">1</div>
-                <div key="2">2</div>
-                <div key="3">3</div>
+            <ReactGridLayout className="layout" layout={this.layout} cols={12} rowHeight={30} width={1200}>
+                <div key="a">a</div>
+                <div key="b">b</div>
+                <div key="c">c</div>
             </ReactGridLayout>
-
-
-            <Grid
-                textAlign='center'
-                style={{height: '100%'}}
-                verticalAlign='middle'
-                columns={1}
-            >
-
-
-                <Grid.Column style={{maxWidth: 450}}>
-                    <Header as='h2' color='teal' textAlign='center'>
-                        <Image src='/logo.png'/>
-                        {' '}Log-in to your account
-                    </Header>
-                    <Form size='large'>
-                        <Segment stacked>
-                            <Form.Input
-                                fluid
-                                icon='user'
-                                iconPosition='left'
-                                placeholder='E-mail address'
-                            />
-                            <Form.Input
-                                fluid
-                                icon='lock'
-                                iconPosition='left'
-                                placeholder='Password'
-                                type='password'
-                            />
-
-                            <Button color='teal' fluid size='large'>Login</Button>
-                        </Segment>
-                    </Form>
-                    <Message>
-                        New to us? <a href='#'>Sign Up</a>
-                    </Message>
-                </Grid.Column>
-
-
-            </Grid>
 
             <Dock position='left' isVisible={this.state.isLeftDockVisible}>
                 {/* you can pass a function as a child here */}

@@ -23,21 +23,18 @@ function createWindow () {
     // }));
 
     console.log('process.env', process.env.NODE_ENV)
-    if(process.env.NODE_ENV === 'production') {
+    if(process.env.NODE_ENV === 'development') {
+        const port = process.env.PORT || 4567;
+        console.log('port',port);
+        win.loadURL("http://localhost:4567/dist/app.html")
+        win.webContents.openDevTools()
+    }else {
         win.loadURL(url.format({
             pathname: path.join(__dirname, 'app.html'),
             protocol: 'file:',
             slashes: true
         }));
-    }else {
-        const port = process.env.PORT || 4567;
-        console.log('port',port)
-        win.loadURL("http://localhost:4567/dist/app.html")
-        win.webContents.openDevTools()
     }
-
-
-
 
     // Emitted when the window is closed.
     win.on('closed', () => {

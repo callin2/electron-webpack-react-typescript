@@ -23,12 +23,12 @@
         scripts.push(
             (process.env.HOT)
                 ? 'http://localhost:' + port + '/dist/vendor.dev.js'
-                : './dist/vendor.prod.js'
+                : './vendor.prod.js'
         );
         scripts.push(
             (process.env.HOT)
                 ? 'http://localhost:' + port + '/dist/app.dev.js'
-                : './dist/app.prod.js'
+                : './app.prod.js'
         );
         document.write(
             scripts
