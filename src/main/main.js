@@ -51,13 +51,14 @@ function createWindow () {
 app.on('ready', ()=>{
 
     if(process.env.NODE_ENV === 'development') {
-        const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
-        installExtension("elgalmkoelokbchhkhacckoklkejnhcd")
-          .then((name) => {
+        const { default: installExtension, REACT_DEVELOPER_TOOLS , REDUX_DEVTOOLS} = require('electron-devtools-installer');
+        installExtension(REACT_DEVELOPER_TOOLS)
+        .then(() => installExtension(REDUX_DEVTOOLS))
+        .then((name) => {
               console.log(`Added Extension:  ${name}`)
               createWindow();
-          })
-          .catch((err) => console.log('An error occurred: ', err));
+        })
+        .catch((err) => console.log('An error occurred: ', err));
 
     }else {
         createWindow();
