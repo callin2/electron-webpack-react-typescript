@@ -4,6 +4,7 @@ var path = require('path');
 const {LicenseWebpackPlugin} = require('license-webpack-plugin');
 const {CommonsChunkPlugin} = require('webpack').optimize;
 const BabiliPlugin = require('babili-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 var BUILD_DIR = path.resolve(__dirname, 'dist');
 var APP_DIR = path.resolve(__dirname, 'src/renderer');
@@ -47,15 +48,6 @@ var config = {
                 test: /\.tsx?$/,
                 exclude: /node_modules/,
                 loader: 'awesome-typescript-loader',
-                query: {
-                    useBabel: true,
-                    useCache: true,
-                    babelOptions: {
-                        presets: ["react-app"],
-                        plugins: [["styled-components", {displayName: true}]]
-                    },
-                }
-
             }, {
                 "test": /\.styl$/,
                 "use": [
@@ -96,7 +88,7 @@ var config = {
     },
 
     plugins: [
-        new webpack.HotModuleReplacementPlugin({}),
+        new UglifyJsPlugin({uglifyOptions:{mangle:true}}),
         new CommonsChunkPlugin({
             "name": [
                 "vendor"
@@ -111,12 +103,6 @@ var config = {
         new LicenseWebpackPlugin({
             "pattern": /^(MIT|ISC|BSD.*)$/
         }),
-        // new webpack.DefinePlugin({
-        //     'process.env.NODE_ENV': 'production'
-        // }),
-        // new BabiliPlugin(),
-
-
     ],
 
     node: {

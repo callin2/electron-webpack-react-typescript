@@ -1,4 +1,4 @@
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
 const url = require('url');
 
@@ -87,3 +87,24 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+ipcMain.on('new-window',(evt, param)=>{
+    console.log(evt, param);
+
+    let _new_win = new BrowserWindow({ width: 1920, height: 1080, webPreferences: {
+            nodeIntegrationInWorker: true
+        }});
+
+    _new_win._param = {
+        param: param
+    };
+
+    _new_win.loadURL(url.format({
+        pathname: path.join(__dirname, param.path),
+        protocol: 'file:',
+        slashes: true
+    }));
+
+    // viz_win.maximize()
+
+});
