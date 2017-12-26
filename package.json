@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "cross-env ./node_modules/.bin/jest ",
     "build:dev": "cross-env  npm run build:main:dev && npm run build:renderer:dev",
     "build:prod": "cross-env npm run build:main:prod && npm run build:renderer:prod",
     "build:main:dev": "cross-env NODE_ENV=development ./node_modules/.bin/webpack --config webpack.main.dev.config.js",
@@ -13,6 +13,19 @@
     "build:renderer:prod": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config webpack.renderer.prod.config.js",
     "start-main-dev": "cross-env HOT=1 NODE_ENV=development electron ./dist",
     "start-renderer-dev": "cross-env HOT=1 NODE_ENV=development  ./node_modules/.bin/webpack-dev-server --config webpack.renderer.dev.config.js --hot --inline"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "./script/preproc.js"
+    },
+    "testMatch": [
+      "**/tests/comp/*.(ts|tsx|js)"
+    ]
   },
   "author": "",
   "license": "ISC",
@@ -35,6 +48,8 @@
     "styled-components": "^2.3.0"
   },
   "devDependencies": {
+    "@types/jasmine": "^2.8.2",
+    "@types/jest": "^21.1.9",
     "@types/react": "^16.0.31",
     "@types/react-dom": "^16.0.3",
     "awesome-typescript-loader": "^3.4.1",
@@ -50,10 +65,16 @@
     "electron": "^1.7.9",
     "electron-debug": "^1.4.0",
     "electron-devtools-installer": "^2.2.1",
+    "enzyme": "^3.2.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "file-loader": "^1.1.6",
     "html-webpack-plugin": "^2.30.1",
     "jest": "^22.0.4",
+    "jest-cli": "^22.0.4",
     "license-webpack-plugin": "^1.1.1",
+    "react-test-renderer": "^16.2.0",
+    "sinon": "^4.1.3",
+    "spectron": "^3.7.2",
     "style-loader": "^0.19.1",
     "typescript": "^2.6.2",
     "uglifyjs-webpack-plugin": "^1.1.4",

@@ -11,6 +11,7 @@
     "strictFunctionTypes": false,
     "target": "ES2015",
     "jsx": "react",
+    "module":"commonjs",
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -24,7 +25,8 @@
     ]
   },
   "include": [
-    "src/renderer/*"
+    "src/renderer/*",
+    "tests/comp/*"
   ],
   "exclude": [
     "node_modules",
