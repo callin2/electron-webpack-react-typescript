@@ -16,4 +16,4 @@ function configureStore(initialState?: AppStateType) {
     return createStore(rootReducer, initialState, enhancer);
 }
 
-export default { configureStore, history };
+export { configureStore, history };
