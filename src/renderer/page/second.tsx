@@ -12,10 +12,22 @@ group by time, charge_amount_at_the_time;`
 
 var chartLayoutConfig = [
     {chartType: 'bar', q: query, p:{}},
+    {chartType: 'bar', q: query, p:{}},
+    {chartType: 'line', q: query,p:{}},
+    {chartType: 'bar', q: query, p:{}},
+
+    {chartType: 'bar', q: query, p:{}},
+    {chartType: 'bar', q: query, p:{}},
+    {chartType: 'bar', q: query, p:{}},
     {chartType: 'line', q: query, p:{}}
 ];
 
 
+
+
+const dashboardLayout = [
+
+]
 
 
 

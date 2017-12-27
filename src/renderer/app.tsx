@@ -18,6 +18,7 @@ import {
 import FirstPage from "./page/first";
 import SecondPage from "./page/second";
 import {M as CS} from './store/configureStore';
+import ThirdPage from "./page/third";
 
 class App extends React.Component {
     private store: any;
@@ -34,7 +35,8 @@ class App extends React.Component {
                 <Switch>
                     <Route exact path="/" component={FirstPage}/>
                     <Route exact path="/hello/" component={SecondPage}/>
-                    <Route component={SecondPage}/>
+                    <Route exact path="/3/" component={ThirdPage}/>
+                    <Route component={ThirdPage}/>
                 </Switch>
             </Router>
         </Provider>
