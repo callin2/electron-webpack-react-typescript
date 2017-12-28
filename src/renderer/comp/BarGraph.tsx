@@ -21,6 +21,8 @@ export function BarGraph(props) {
     const xMax = width - margin.left - margin.right;
     const yMax = height - margin.top - margin.bottom;
 
+    if(xMax < 1 || yMax < 1) return null;
+
 // We'll make some helpers to get at the data we want
     const x = d => +d.time;
     const y = d => +d.charge_amount_at_the_time;
@@ -40,6 +42,8 @@ export function BarGraph(props) {
     const compose = (scale, accessor) => (data) => scale(accessor(data));
     const xPoint = compose(xScale, x);
     const yPoint = compose(yScale, y);
+
+
 
     return (
         <svg width={props.width} height={props.height}>

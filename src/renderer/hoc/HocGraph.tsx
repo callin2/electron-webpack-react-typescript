@@ -5,6 +5,7 @@ import { resolve } from "react-resolver";
 import { ParentSize } from '@vx/responsive';
 import withFrame from "./withFrame";
 import {AGraphDataProvider} from "../common/dataprovider/AgensGraphDataProvider";
+import MapGraph from "../comp/MapGraph";
 
 function findGraphByType(gType: string) {
     console.log('gType', gType)
@@ -13,6 +14,7 @@ function findGraphByType(gType: string) {
         case 'line': return LineGraph;
         case 'graph': return LineGraph;
         case 'table': return LineGraph;
+        case 'map': return MapGraph;
     }
 }
 
