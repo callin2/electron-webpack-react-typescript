@@ -42,14 +42,41 @@ const LayoutConfig = {
 };
 
 
-class ThirdPageModel {
+
+
+class TabModel {
     @observable activeTab: string = 'Block Chain';
+    @observable tabList: any[] = [
+        {name: 'Block Chain' },
+        {name: 'E-Charger' },
+        {name: 'ETC' }
+    ];
 
     @action
     setActiveTab(tab: string) {
         this.activeTab = tab;
     }
+
+    @computed
+    get activeTabLayout() {
+        return LayoutConfig[this.activeTab];
+    }
 }
+
+
+class ThirdPageModel {
+    @observable tabs: TabModel = new TabModel();
+
+}
+
+
+const MenuTab = observer(({tabs})=>{
+    return <Menu.Menu>
+        {tabs.tabList.map((tab)=>{
+            return <Menu.Item key={tab.name} name={tab.name} active={tabs.activeTab === tab.name} onClick={()=>tabs.setActiveTab(tab.name)}/>
+        })}
+    </Menu.Menu>
+})
 
 
 @observer
@@ -62,9 +89,8 @@ class ThirdPage extends React.Component {
     store: ThirdPageModel;
     constructor(props) {
         super(props);
-        this.store
 
-
+        this.store = new ThirdPageModel()
     }
 
     @action
@@ -82,16 +108,12 @@ class ThirdPage extends React.Component {
                     V_BA
                 </Menu.Item>
 
-                <Menu.Menu>
-                    <Menu.Item name='Block Chain' active={this.activeItem === 'Block Chain'} onClick={this.handleTabChange}/>
-                    <Menu.Item name='E-Charger' active={this.activeItem === 'E-Charger'} onClick={this.handleTabChange}/>
-                    <Menu.Item name='ETC' active={this.activeItem === 'ETC'} onClick={this.handleTabChange}/>
-                </Menu.Menu>
+                <MenuTab tabs={this.store.tabs}/>
 
             </Menu>
 
             <div className='ui bottom attached'>
-                <ChartContainer layout={this.activeLayout}/>
+                <ChartContainer layout={this.store.tabs.activeTabLayout}/>
             </div>
         </div>
     }
