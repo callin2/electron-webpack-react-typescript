@@ -3,17 +3,17 @@ electron-webpack-react-typescript boilerplate
 
 Install
 =======
-1. yarn
+1. `yarn` (or `npm install`)
 
 
 Build
 ===========
 
 # Development
-1. npm run build:main:dev
-2. npm run start-renderer-dev
+1. `npm run build:main:dev`
+2. `npm run start-renderer-dev`
 
 
 # Production
-1. npm run build:main:prod
-2. npm run build:renderer:prod
+1. `npm run build:main:prod`
+2. `npm run build:renderer:prod`
