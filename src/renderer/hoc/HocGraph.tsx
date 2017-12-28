@@ -1,21 +1,55 @@
-
 import * as React from 'react'
 import {BarGraph} from "../comp/BarGraph";
 import LineGraph from "../comp/LineGraph";
 import { resolve } from "react-resolver";
+import { ParentSize } from '@vx/responsive';
+import withFrame from "./withFrame";
+import {AGraphDataProvider} from "../common/dataprovider/AgensGraphDataProvider";
 
 function findGraphByType(gType: string) {
+    console.log('gType', gType)
     switch(gType) {
         case 'bar': return BarGraph;
         case 'line': return LineGraph;
+        case 'graph': return LineGraph;
+        case 'table': return LineGraph;
     }
 }
 
-export default function HocGraph({chartType,q,p}) {
 
-    var Graph =  resolve("data", (props)=>{
-        return Promise.resolve(100);
-    })(findGraphByType(chartType));
+var config = {
+    user: 'v_ba',
+    password: 'blockchain!',
+    database: 'v_ba',
+    graph_path:'v_ba',
+    host: '27.117.163.21',
+    port: 5559
+};
 
-    return <Graph/>
+var config_local = {
+    user: 'agraph',
+    password: 'agraph',
+    database: 'imdb',
+    graph_path:'imdb_graph',
+    host: '192.168.0.56',
+    port: 6179
+};
+
+export default function HocGraph(props) {
+    console.log('HocGraph', props)
+
+    var Graph = resolve("data", (p)=>{
+        console.log('propxxs', p);
+
+        var dataProvider = new AGraphDataProvider()
+        return dataProvider.configure(config)
+            .then((prv)=>prv.connect())
+            .then((prv)=>prv.queryPromise(props.dataset.query))
+
+        // return dataProvider.queryPromise(props.dataset.query)
+
+        // return Promise.resolve(100);
+    })(withFrame(findGraphByType(props.chartType)));
+
+    return <Graph {...props}/>
 }

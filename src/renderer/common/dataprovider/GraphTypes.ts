@@ -86,10 +86,14 @@ export abstract class DynamicGraphDataProvider extends GraphDataProvider {
   abstract async connect(): Promise<DynamicGraphDataProvider>;
   abstract close();
   abstract query(qry: string, param?: any);
+  abstract queryPromise(query: string, param?: any): Promise<any>;
   abstract update(q: string, p: any);
   abstract expand(vertexId: string): string;
   abstract getMeta(): Promise<GraphData>;
   abstract keysByLabelNType(label: string, type: 'vertex' | 'edge'): Promise<GraphData>;
+
+
+
 }
 
 export class BufferedGraphDataProvider extends GraphDataProvider {

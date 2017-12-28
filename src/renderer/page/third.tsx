@@ -1,11 +1,9 @@
 import * as React from 'react';
 import { observable, computed, action } from "mobx";
-import { observer } from "mobx-react";
-import HocGraph from "../hoc/HocGraph";
+import { observer, Provider } from "mobx-react";
 import {Tab, Table, Header, Menu, Item, Grid, Form, Segment, Button, Message, Image, Accordion, Icon} from "semantic-ui-react";
-import SecondPage from "./second";
 import {ReactElement} from "react";
-import ChartContainer from "../comp/ChartContainer";
+import ChartContainer from "../container/ChartContainer";
 
 var query = `select a.time AS time, a.total_charge_amount AS charge_amount_at_the_time from (
     match (n:station)-[r:transaction]->(m:echarger)
@@ -15,33 +13,34 @@ var query = `select a.time AS time, a.total_charge_amount AS charge_amount_at_th
 group by time, charge_amount_at_the_time;`
 
 
-var chartLayoutConfig = [
-    {chartType: 'bar', q: query, p:{}},
-    {chartType: 'line', q: query, p:{}}
-];
-
-
-
-
-const dashboardLayout = [
-
-]
-
-
-/**bserver
- * {chartLayoutConfig.map((conf, idx)=>{
-                return <HocGraph  {...conf} key={idx}/>
-            })}
+/**
+ * 챠트에서 사용할 데이타를 조회하는 쿼리 및 파라미터를 설정 할 수 있습니다.
  */
-
-
-const LayoutConfig = {
-    'Block Chain': [],
-    'E-Charger': [],
-    'ETC': []
+const DataSetList = {
+    sampleDs : {
+        query: query,
+        param: {}
+    }
 };
 
-
+/**
+ * 각 탭에서 챠트의 배치를 설정 할 수 있습니다.
+ *
+ */
+const LayoutConfig = {
+    'Block Chain': [
+        {chartType:'bar', title:'11 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:0, y:0, w:6, h: 3 }},
+        {chartType:'bar', title:'11 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:6, y:0, w:6, h: 1 }},
+        {chartType:'bar', title:'11 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:6, y:0, w:6, h: 2 }},
+    ],
+    'E-Charger': [
+        {chartType:'bar', title:'22 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:1, y:0, w:4, h: 2 }},
+        {chartType:'bar', title:'22 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:1, y:0, w:4, h: 2 }},
+    ],
+    'ETC': [
+        {chartType:'bar', title:'33 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:2, y:0, w:3, h: 3 }},
+    ]
+};
 
 
 class TabModel {
@@ -59,6 +58,7 @@ class TabModel {
 
     @computed
     get activeTabLayout() {
+        console.log('this.activeTab', this.activeTab)
         return LayoutConfig[this.activeTab];
     }
 }
@@ -66,17 +66,32 @@ class TabModel {
 
 class ThirdPageModel {
     @observable tabs: TabModel = new TabModel();
-
 }
 
 
 const MenuTab = observer(({tabs})=>{
     return <Menu.Menu>
         {tabs.tabList.map((tab)=>{
-            return <Menu.Item key={tab.name} name={tab.name} active={tabs.activeTab === tab.name} onClick={()=>tabs.setActiveTab(tab.name)}/>
+            return <Menu.Item
+                key={tab.name}
+                name={tab.name}
+                active={tabs.activeTab === tab.name}
+                onClick={()=>tabs.setActiveTab(tab.name)}
+            />
         })}
     </Menu.Menu>
-})
+});
+
+
+const MenuPane = ({children}) => {
+    return <div className='ui bottom attached'  style={{height:'calc(100% - 40px)'}}>
+        {children}
+    </div>
+};
+
+
+
+
 
 
 @observer
@@ -95,26 +110,23 @@ class ThirdPage extends React.Component {
 
     @action
     handleTabChange = (evt, data) => {
-        this.store = new ThirdPageModel();
         this.activeItem = data.name;
         this.activeLayout = LayoutConfig[this.activeItem];
     };
 
     render() {
-        return <div>
+        return <div style={{height:'100%'}}>
             <Menu attached='top' inverted pointing color={'teal'}>
                 <Menu.Item as='a' header>
                     <Icon name='settings' />
                     V_BA
                 </Menu.Item>
-
                 <MenuTab tabs={this.store.tabs}/>
-
             </Menu>
 
-            <div className='ui bottom attached'>
+            <MenuPane>
                 <ChartContainer layout={this.store.tabs.activeTabLayout}/>
-            </div>
+            </MenuPane>
         </div>
     }
 }
