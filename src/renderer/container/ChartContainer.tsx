@@ -22,6 +22,8 @@ class ChartContainerModel {
 
     @computed
     get RGLLayout() {
+        if(!this.layoutList) return []
+
         return this.layoutList.map((l, idx)=>{
             return Object.assign({i:idx.toString()},l.bounds)
         })
@@ -39,7 +41,7 @@ class ChartContainer extends React.Component<ChartContainerProp,{}> {
         console.log('props, ', props)
 
         this.store = new ChartContainerModel();
-        this.store.layoutList = props.layout
+        this.store.layoutList = props.layout ? props.layout : []
     }
 
     componentWillReceiveProps(newProps) {

@@ -44,11 +44,11 @@ const LayoutConfig = {
 
 
 class TabModel {
-    @observable activeTab: string = 'Block Chain';
+    @observable activeTab: string = null;
     @observable tabList: any[] = [
-        {name: 'Block Chain' },
-        {name: 'E-Charger' },
-        {name: 'ETC' }
+        // {name: 'Block Chain' },
+        // {name: 'E-Charger' },
+        // {name: 'ETC' }
     ];
 
     @action
@@ -59,6 +59,7 @@ class TabModel {
     @computed
     get activeTabLayout() {
         console.log('this.activeTab', this.activeTab)
+        if(!this.activeTab) return []
         return LayoutConfig[this.activeTab];
     }
 }
@@ -106,6 +107,8 @@ class ThirdPage extends React.Component {
         super(props);
 
         this.store = new ThirdPageModel()
+        this.store.tabs.tabList = Object.keys(LayoutConfig).map((k)=>({name:k}))
+        this.store.tabs.activeTab = this.store.tabs.tabList[0]
     }
 
     @action

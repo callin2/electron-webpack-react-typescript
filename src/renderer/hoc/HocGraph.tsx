@@ -27,12 +27,12 @@ var config = {
 };
 
 var config_local = {
-    user: 'agraph',
-    password: 'agraph',
-    database: 'imdb',
-    graph_path:'imdb_graph',
-    host: '192.168.0.56',
-    port: 6179
+    user: 'v_ba',
+    password: 'blockchain!',
+    database: 'v_ba',
+    graph_path:'v_ba',
+    host: '192.168.0.47',
+    port: 5432
 };
 
 export default function HocGraph(props) {

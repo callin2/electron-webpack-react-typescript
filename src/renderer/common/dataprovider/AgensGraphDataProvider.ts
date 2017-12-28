@@ -49,7 +49,7 @@ export class AGraphDataProvider extends DynamicGraphDataProvider {
 
                     this.dbclient.query("match p = (n)-[]-() where id(n) = '3.1415' return p limit 1; ", [], (err) => {
                         if (err) {
-                            console.log('', err);
+                            // console.log('', err);
                             this.AgensVersion = "1.3"
                         }
                     })
@@ -150,6 +150,7 @@ export class AGraphDataProvider extends DynamicGraphDataProvider {
 
 
     queryPromise(q: string, p: any[] = []): Promise<any> {
+        console.info('queryPromise', q)
         if (this.isGraphQuery(q)) {
             return this.queryGraphPromise(q, p);
         } else {

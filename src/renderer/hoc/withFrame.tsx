@@ -11,7 +11,7 @@ export default function withFrame(BaseComponent) {
         render() {
             return <React.Fragment>
                 <Header size='small' attached='top' color='red' inverted>
-                    Attached Header
+                    {this.props['title']}
                 </Header>
                 <div className='ui bottom attached' style={{height:'calc(100% - 40px)'}}>
                     <ParentSize>
