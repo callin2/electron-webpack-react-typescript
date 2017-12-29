@@ -14,8 +14,7 @@ function findGraphByType(gType: string) {
         case 'bar': return BarGraph;
         case 'line': return LineGraph;
         case 'grid': return DataGrid;
- 
-	case 'graph': return LineGraph;
+        case 'graph': return LineGraph;
         case 'map': return MapGraph;
     }
 }
