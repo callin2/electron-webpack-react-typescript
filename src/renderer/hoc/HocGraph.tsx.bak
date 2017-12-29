@@ -13,10 +13,10 @@ function findGraphByType(gType: string) {
     switch(gType) {
         case 'bar': return BarGraph;
         case 'line': return LineGraph;
-        case 'grid': return DataGrid;
- 
-	case 'graph': return LineGraph;
+        case 'graph': return LineGraph;
+        case 'table': return LineGraph;
         case 'map': return MapGraph;
+        case 'grid': return DataGrid;
     }
 }
 
