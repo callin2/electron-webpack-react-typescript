@@ -6,6 +6,7 @@ import { ParentSize } from '@vx/responsive';
 import withFrame from "./withFrame";
 import {AGraphDataProvider} from "../common/dataprovider/AgensGraphDataProvider";
 import MapGraph from "../comp/MapGraph";
+import {DataGrid} from "../comp/DataGrid";
 
 function findGraphByType(gType: string) {
     console.log('gType', gType)
@@ -15,6 +16,7 @@ function findGraphByType(gType: string) {
         case 'graph': return LineGraph;
         case 'table': return LineGraph;
         case 'map': return MapGraph;
+        case 'grid': return DataGrid;
     }
 }
 

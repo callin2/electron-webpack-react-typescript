@@ -45,6 +45,7 @@ const LayoutConfig = {
     'ETC': [
         {chartType:'map', title:'11 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:0, y:0, w:6, h: 9 , minW:2, minH:3, static: true}},
         {chartType:'bar', title:'33 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:6, y:0, w:3, h: 5 , minW:2, minH:3}},
+        {chartType:'grid', title:'33 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:6, y:0, w:3, h: 5 , minW:2, minH:3}},
     ]
 };
 
@@ -95,8 +96,6 @@ const MenuPane = ({children}) => {
         {children}
     </div>
 };
-
-
 
 
 
