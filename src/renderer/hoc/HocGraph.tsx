@@ -7,6 +7,7 @@ import withFrame from "./withFrame";
 import {AGraphDataProvider} from "../common/dataprovider/AgensGraphDataProvider";
 import MapGraph from "../comp/MapGraph";
 import {DataGrid} from "../comp/DataGrid";
+import {CYMap} from "../comp/CYMap";
 
 function findGraphByType(gType: string) {
     console.log('gType', gType)
@@ -14,7 +15,7 @@ function findGraphByType(gType: string) {
         case 'bar': return BarGraph;
         case 'line': return LineGraph;
         case 'graph': return LineGraph;
-        case 'table': return LineGraph;
+        case 'cymap': return CYMap;
         case 'map': return MapGraph;
         case 'grid': return DataGrid;
     }

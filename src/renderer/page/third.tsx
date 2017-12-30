@@ -34,7 +34,7 @@ const DataSetList = {
  */
 const LayoutConfig = {
     'Block Chain': [
-        {chartType:'bar', title:'11 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:0, y:0, w:6, h: 13 , minW:2, minH:3}},
+        {chartType:'cymap', title:'XXX', dataset: DataSetList['sampleDs'], bounds: {x:0, y:0, w:4, h: 10 , minW:2, minH:3, static: true}},
         {chartType:'bar', title:'11 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:6, y:0, w:6, h: 5 , minW:2, minH:3}},
         {chartType:'bar', title:'11 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:6, y:0, w:6, h: 8 , minW:2, minH:3}},
     ],
