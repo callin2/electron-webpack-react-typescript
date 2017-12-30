@@ -12,6 +12,28 @@ var query = `select a.time AS time, a.total_charge_amount AS charge_amount_at_th
     return substring(r.ec_charge_start_time,0,10) as time, sum(r.charge_amount) as total_charge_amount) a 
 group by time, charge_amount_at_the_time;`
 
+var barQuery = `SELECT a.time AS time, a.total_charge_amount AS charge_amount_at_the_time FROM (
+            MATCH (n:station)-[r:transaction]->(m:echarger)
+            WHERE r.ec_charge_start_time > '20171226100000'
+              AND r.ec_charge_start_time < '20171229115900'
+            RETURN substring(r.ec_charge_start_time,0,10) as time, sum(r.charge_amount) as total_charge_amount) a
+        WHERE a.total_charge_amount <> 0 
+        GROUP BY time, charge_amount_at_the_time;`
+    
+var lineQuery = `SELECT a.date AS date,b.average_sales_amount AS avg_sales_amount,a.time AS current_time,a.sales_amount AS current_sales
+           FROM (MATCH (n:echarger)-[r:transaction]->(m:evehicle)
+                 WHERE r.ec_charge_start_time > '20171226100000'
+                   AND r.ec_charge_start_time < '20171229115900' 
+                 RETURN substring(r.ec_charge_start_time,0,8) as time,r.date as date, sum(r.pay_amount) as sales_amount) a, history_data b 
+           WHERE a.date=to_jsonb(b.date)
+           GROUP BY time,current_sales,a.date,avg_sales_amount;`
+    
+var gridQuery = `SELECT station_id, lat, lon, charger, conn_type, e_usage
+             FROM (MATCH (n:station)-[r:has]->(m:echarger)-[r2:transaction]->(e:evehicle)
+                   WHERE n.echarge_station_id in ['STA0000642','STA0000643','STA0000644']
+                   RETURN n.echarge_station_id AS station_id, n.estation_loc_latitude AS lat, n.estation_loc_longitude AS lon, 
+                          m.echarger_id as charger, m.echarger_connector_type AS conn_type, sum(r2.charge_amount) AS e_usage) a
+           GROUP BY charger,conn_type,e_usage,station_id,lat,lon ORDER BY station_id;`
 
 /**
  * 챠트에서 사용할 데이타를 조회하는 쿼리 및 파라미터를 설정 할 수 있습니다.
@@ -22,6 +44,21 @@ const DataSetList = {
         param: {}
     },
 
+    barDs : {
+        query: barQuery,
+        param: {}
+    },
+    
+    lineDs : {
+        query: lineQuery,
+        param: {}        
+    },
+    
+    gridDs : {
+        query: gridQuery,
+        param: {}
+    },
+    
     sampleGraphDs: {
         query: ``,
         param: {}
@@ -34,9 +71,10 @@ const DataSetList = {
  */
 const LayoutConfig = {
     'Block Chain': [
+        {chartType:'bar', title:'Bar Chart', dataset: DataSetList['barDs'], bounds: {x:0, y:0, w:6, h: 13 , minW:2, minH:3}},
+        {chartType:'line', title:'Line Chart', dataset: DataSetList['lineDs'], bounds: {x:6, y:0, w:6, h: 5 , minW:2, minH:3}},
+        {chartType:'grid', title:'Grid Chart', dataset: DataSetList['gridDs'], bounds: {x:6, y:0, w:6, h: 8 , minW:2, minH:3}},
         {chartType:'cymap', title:'XXX', dataset: DataSetList['sampleDs'], bounds: {x:0, y:0, w:4, h: 10 , minW:2, minH:3, static: true}},
-        {chartType:'bar', title:'11 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:6, y:0, w:6, h: 5 , minW:2, minH:3}},
-        {chartType:'bar', title:'11 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:6, y:0, w:6, h: 8 , minW:2, minH:3}},
     ],
     'E-Charger': [
         {chartType:'bar', title:'22 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:1, y:0, w:4, h: 7 , minW:2, minH:3}},

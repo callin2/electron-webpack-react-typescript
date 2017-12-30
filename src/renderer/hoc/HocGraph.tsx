@@ -14,10 +14,10 @@ function findGraphByType(gType: string) {
     switch(gType) {
         case 'bar': return BarGraph;
         case 'line': return LineGraph;
+        case 'grid': return DataGrid;
         case 'graph': return LineGraph;
         case 'cymap': return CYMap;
         case 'map': return MapGraph;
-        case 'grid': return DataGrid;
     }
 }
 
@@ -47,7 +47,7 @@ export default function HocGraph(props) {
         console.log('propxxs', p);
 
         var dataProvider = new AGraphDataProvider()
-        return dataProvider.configure(config)
+        return dataProvider.configure(config_local)
             .then((prv)=>prv.connect())
             .then((prv)=>prv.queryPromise(props.dataset.query))
 
