@@ -70,7 +70,7 @@ class ChartContainer extends React.Component<ChartContainerProp,{}> {
     }
 
     handleLayoutChange(layout, layouts) {
-        console.log(layout, layouts)
+        // console.log(layout, layouts)
     }
 
     render() {

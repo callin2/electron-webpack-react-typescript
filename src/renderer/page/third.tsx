@@ -35,6 +35,13 @@ var gridQuery = `SELECT station_id, lat, lon, charger, conn_type, e_usage
                           m.echarger_id as charger, m.echarger_connector_type AS conn_type, sum(r2.charge_amount) AS e_usage) a
            GROUP BY charger,conn_type,e_usage,station_id,lat,lon ORDER BY station_id;`
 
+
+var mapQuery = `
+    MATCH p=(n:station)-[r:has]->(m:echarger)-[r2:transaction]->(e:evehicle)
+    WHERE n.echarge_station_id in ['STA0000642','STA0000643','STA0000644']
+    RETURN p;
+`
+
 /**
  * 챠트에서 사용할 데이타를 조회하는 쿼리 및 파라미터를 설정 할 수 있습니다.
  */
@@ -60,7 +67,7 @@ const DataSetList = {
     },
     
     sampleGraphDs: {
-        query: ``,
+        query: mapQuery,
         param: {}
     }
 };
@@ -74,7 +81,7 @@ const LayoutConfig = {
         {chartType:'bar', title:'Bar Chart', dataset: DataSetList['barDs'], bounds: {x:0, y:0, w:6, h: 13 , minW:2, minH:3}},
         {chartType:'line', title:'Line Chart', dataset: DataSetList['lineDs'], bounds: {x:6, y:0, w:6, h: 5 , minW:2, minH:3}},
         {chartType:'grid', title:'Grid Chart', dataset: DataSetList['gridDs'], bounds: {x:6, y:0, w:6, h: 8 , minW:2, minH:3}},
-        {chartType:'cymap', title:'XXX', dataset: DataSetList['sampleDs'], bounds: {x:0, y:0, w:4, h: 10 , minW:2, minH:3, static: true}},
+        {chartType:'cymap', title:'XXX', dataset: DataSetList['sampleGraphDs'], bounds: {x:0, y:0, w:4, h: 10 , minW:2, minH:3}},
     ],
     'E-Charger': [
         {chartType:'bar', title:'22 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:1, y:0, w:4, h: 7 , minW:2, minH:3}},
@@ -168,6 +175,10 @@ class ThirdPage extends React.Component {
                     V_BA
                 </Menu.Item>
                 <MenuTab tabs={this.store.tabs}/>
+
+                <Menu.Menu>
+
+                </Menu.Menu>
             </Menu>
 
             <MenuPane>

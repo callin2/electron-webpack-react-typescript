@@ -47,7 +47,7 @@ export default function HocGraph(props) {
         console.log('propxxs', p);
 
         var dataProvider = new AGraphDataProvider()
-        return dataProvider.configure(config_local)
+        return dataProvider.configure(config)
             .then((prv)=>prv.connect())
             .then((prv)=>prv.queryPromise(props.dataset.query))
 
