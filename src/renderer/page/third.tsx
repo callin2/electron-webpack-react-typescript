@@ -20,13 +20,13 @@ var barQuery = `SELECT a.time AS time, a.total_charge_amount AS charge_amount_at
         WHERE a.total_charge_amount <> 0 
         GROUP BY time, charge_amount_at_the_time;`
     
-var lineQuery = `SELECT a.date AS date,b.average_sales_amount AS avg_sales_amount,a.time AS current_time,a.sales_amount AS current_sales
+var lineQuery = `SELECT a.date AS date,b.average_sales_amount AS avg_sales_amount,a.time AS graph_time,a.sales_amount AS current_sales
            FROM (MATCH (n:echarger)-[r:transaction]->(m:evehicle)
-                 WHERE r.ec_charge_start_time > '20171226100000'
-                   AND r.ec_charge_start_time < '20171229115900' 
+                 WHERE r.ec_charge_start_time > '20171226100000'                                                       
+                   AND r.ec_charge_start_time < '20171229115900'                                                          
                  RETURN substring(r.ec_charge_start_time,0,8) as time,r.date as date, sum(r.pay_amount) as sales_amount) a, history_data b 
            WHERE a.date=to_jsonb(b.date)
-           GROUP BY time,current_sales,a.date,avg_sales_amount;`
+           GROUP BY time,current_sales,a.date,avg_sales_amount ORDER BY a.time;`
     
 var gridQuery = `SELECT station_id, lat, lon, charger, conn_type, e_usage
              FROM (MATCH (n:station)-[r:has]->(m:echarger)-[r2:transaction]->(e:evehicle)
@@ -74,7 +74,7 @@ const LayoutConfig = {
         {chartType:'bar', title:'Bar Chart', dataset: DataSetList['barDs'], bounds: {x:0, y:0, w:6, h: 13 , minW:2, minH:3}},
         {chartType:'line', title:'Line Chart', dataset: DataSetList['lineDs'], bounds: {x:6, y:0, w:6, h: 5 , minW:2, minH:3}},
         {chartType:'grid', title:'Grid Chart', dataset: DataSetList['gridDs'], bounds: {x:6, y:0, w:6, h: 8 , minW:2, minH:3}},
-        {chartType:'cymap', title:'XXX', dataset: DataSetList['sampleDs'], bounds: {x:0, y:0, w:4, h: 10 , minW:2, minH:3, static: true}},
+//        {chartType:'cymap', title:'XXX', dataset: DataSetList['sampleDs'], bounds: {x:0, y:0, w:4, h: 10 , minW:2, minH:3, static: true}},
     ],
     'E-Charger': [
         {chartType:'bar', title:'22 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:1, y:0, w:4, h: 7 , minW:2, minH:3}},
