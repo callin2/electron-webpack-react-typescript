@@ -5,6 +5,13 @@ import {Tab, Table, Header, Menu, Item, Grid, Form, Segment, Button, Message, Im
 import {ReactElement} from "react";
 import ChartContainer from "../container/ChartContainer";
 
+import { DateRangePicker, SingleDatePicker, DayPickerRangeController } from 'react-dates';
+import 'react-dates/lib/css/_datepicker.css';
+import 'react-dates/initialize';
+
+
+
+
 var query = `select a.time AS time, a.total_charge_amount AS charge_amount_at_the_time from (
     match (n:station)-[r:transaction]->(m:echarger)
     where r.ec_charge_start_time > '20171226100000'
@@ -37,9 +44,8 @@ var gridQuery = `SELECT station_id, lat, lon, charger, conn_type, e_usage
 
 
 var mapQuery = `
-    MATCH p=(n:station)-[r:has]->(m:echarger)-[r2:transaction]->(e:evehicle)
-    WHERE n.echarge_station_id in ['STA0000642','STA0000643','STA0000644']
-    RETURN p;
+    MATCH (n:station)
+    RETURN n;
 `
 
 /**
@@ -78,10 +84,11 @@ const DataSetList = {
  */
 const LayoutConfig = {
     'Block Chain': [
+        {chartType:'cymap', title:'XXX', dataset: DataSetList['sampleGraphDs'], bounds: {x:0, y:0, w:6, h: 10 , minW:2, minH:3}},
         {chartType:'bar', title:'Bar Chart', dataset: DataSetList['barDs'], bounds: {x:0, y:0, w:6, h: 13 , minW:2, minH:3}},
         {chartType:'line', title:'Line Chart', dataset: DataSetList['lineDs'], bounds: {x:6, y:0, w:6, h: 5 , minW:2, minH:3}},
         {chartType:'grid', title:'Grid Chart', dataset: DataSetList['gridDs'], bounds: {x:6, y:0, w:6, h: 8 , minW:2, minH:3}},
-        {chartType:'cymap', title:'XXX', dataset: DataSetList['sampleGraphDs'], bounds: {x:0, y:0, w:4, h: 10 , minW:2, minH:3}},
+
     ],
     'E-Charger': [
         {chartType:'bar', title:'22 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:1, y:0, w:4, h: 7 , minW:2, minH:3}},
@@ -168,6 +175,8 @@ class ThirdPage extends React.Component {
     };
 
     render() {
+        var param = {from: '20171229', to:'20171230'};
+
         return <div style={{height:'100%'}}>
             <Menu attached='top' inverted pointing color={'teal'}>
                 <Menu.Item as='a' header>
@@ -177,12 +186,18 @@ class ThirdPage extends React.Component {
                 <MenuTab tabs={this.store.tabs}/>
 
                 <Menu.Menu>
-
+                    <DateRangePicker
+                        startDateId={'startDate'}
+                        endDateId={'endDate'}
+                        startDate={null} // momentPropTypes.momentObj or null,
+                        endDate={null} // momentPropTypes.momentObj or null,
+                        focusedInput={null} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
+                    />
                 </Menu.Menu>
             </Menu>
 
             <MenuPane>
-                <ChartContainer layout={this.store.tabs.activeTabLayout}/>
+                <ChartContainer layout={this.store.tabs.activeTabLayout} params={param}/>
             </MenuPane>
         </div>
     }

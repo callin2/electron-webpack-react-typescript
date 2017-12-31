@@ -10,7 +10,9 @@ import {observer} from "mobx-react";
 
 interface ChartContainerProp {
     layout?: any
+    params?: any
 }
+
 
 export interface LayoutInfo {
     chartType: string

@@ -1,9 +1,11 @@
 import * as React from 'react';
 import ErrorBoundary from 'react-error-boundary';
 
+import ol from 'ol'
 import ol_Map from 'ol/map'
 import ol_Feature from 'ol/feature'
 import ol_layer_Tile  from 'ol/layer/tile';
+import ol_layer_Vector  from 'ol/layer/vector';
 import ol_source_OSM from 'ol/source/osm';
 import ol_source_Stamen from 'ol/source/stamen';
 import ol_source_Vector from 'ol/source/vector';
@@ -14,8 +16,11 @@ import ol_format_GeoJSON from 'ol/format/geojson'
 import ol_View from 'ol/view';
 import ol_Proj from 'ol/proj';
 
+import * as d3 from 'd3'
 
+var json = require('../us-states.json')
 
+console.log('=============',json)
 
 const MyFallbackComponent = ({ componentStack, error }) => (
     <div>
@@ -30,15 +35,15 @@ const MyFallbackComponent = ({ componentStack, error }) => (
 export class  CYMap extends React.Component {
     olContainer: HTMLDivElement;
     map: any;
+    props: any;
 
     constructor(props) {
         super(props)
 
-        console.log(props)
+        console.log(CYMap, props.data)
     }
 
     componentDidMount() {
-
         var geoJson = {
             "type": "Feature",
             "geometry": {
@@ -49,7 +54,6 @@ export class  CYMap extends React.Component {
                 "name": "Dinagat Islands"
             }
         }
-
         var geojson2 = {
             "type": "FeatureCollection",
             "features": [
@@ -166,45 +170,35 @@ export class  CYMap extends React.Component {
             ]
         }
 
-
-
         var sourceVector = new ol_source_Vector({
             // features: (new ol_format_GeoJSON()).readFeatures(geojson2)
         })
-        let feature = new ol_Feature({
-            // geometry: new ol_geom_Point(ol_Proj.fromLonLat([0, 0])),
-            geometry: new ol_geom_Point(ol_Proj.fromLonLat([35.013243, 26.717850])),
-            // labelPoint: new ol_geom_Point([35.013243, 26.717850]),
-            name: 'ccccc'
-        });
 
         var sv = new ol_source_Vector({
             // format: new ol_format_GeoJSON({defaultDataProjection: 'EPSG:3857'}),
             format: new ol_format_GeoJSON(),
             // format: new ol_format_GeoJSON({defaultDataProjection: 'EPSG:4326'}),
             loader: function (extent, resolution, projection) {
-
                 sv.addFeatures(sv.getFormat().readFeatures(geojson2,{dataProjection:'EPSG:4326', featureProjection:'EPSG:3857'}));
-                // sv.addFeatures(sv.getFormat().readFeatures(geojson2));
-
             },
         });
 
-        feature.set('weight',100)
-        feature.set('name','ccccc')
-        feature.setId('ccccc')
-        feature.setGeometryName('ccccc')
+        this.props.data.nodes.forEach((n)=> {
+            if(n.labels[0] !== 'station') return;
+            var feature = new ol_Feature({
+                geometry: new ol_geom_Point(ol_Proj.transform([+n.props.estation_loc_longitude, +n.props.estation_loc_latitude],'EPSG:4326','EPSG:3857')),
+            });
 
-        sourceVector.addFeature(feature)
-
-        var vector = new ol_layer_Heatmap({
-            // source: sourceVector,
-            source: sv,
-            blur: 20,
-            radius: 10
+            feature.set('weight', n.props.num_echarger / 10);
+            sourceVector.addFeature(feature)
         });
 
 
+        var vector = new ol_layer_Heatmap({
+            source: sourceVector,
+            blur: 50,
+            radius: 10
+        });
 
         this.map = new ol_Map({
             layers: [
@@ -224,6 +218,54 @@ export class  CYMap extends React.Component {
 
         this.map.setTarget(this.olContainer)
 
+
+
+        var overlay = new ol_layer_Vector("states");
+
+        // Add the container when the overlay is added to the map.
+        overlay.afterAdd = () => {
+
+            console.log('afterAddafterAddafterAddafterAddafterAddafterAdd')
+            //get the vector layer div element
+            var div = d3.selectAll("#" + overlay.div.id);
+            //remove the existing svg element and create a new one
+            div.selectAll("svg").remove();
+            var svg = div.append("svg");
+            //Add a G (group) element
+            var g = svg.append("g");
+            var bounds = d3.geo.bounds(json),
+                path = d3.geo.path().projection(project);
+            var feature = g.selectAll("path")
+                .data(json.features)
+                .enter().append("path");
+            this.map.events.register("moveend", this.map, reset);
+            reset();
+
+            function reset() {
+                var bottomLeft = project(bounds[0]),
+                    topRight = project(bounds[1]);
+
+                console.log(bottomLeft, topRight)
+
+                svg.attr("width", topRight[0] - bottomLeft[0])
+                    .attr("height", bottomLeft[1] - topRight[1])
+                    .style("margin-left", bottomLeft[0] + "px")
+                    .style("margin-top", topRight[1] + "px");
+
+                g.attr("transform", "translate(" + -bottomLeft[0] + "," + -topRight[1] + ")");
+
+                feature.attr("d", path);
+            }
+            function project(x) {
+                var point = this.map.getViewPortPxFromLonLat(new ol.LonLat(x[0], x[1])
+                    .transform("EPSG:4326", "EPSG:3857"));
+                return [point.x, point.y];
+            }
+        };
+
+
+        this.map.addLayer(overlay);
+        console.log('sssssssssssssssss')
     }
 
     componentWillUpdate() {
