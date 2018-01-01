@@ -8,6 +8,7 @@ import {AGraphDataProvider} from "../common/dataprovider/AgensGraphDataProvider"
 import MapGraph from "../comp/MapGraph";
 import {DataGrid} from "../comp/DataGrid";
 import {CYMap} from "../comp/CYMap";
+import AreaChart from "../comp/AreaChart";
 
 function findGraphByType(gType: string) {
     console.log('gType', gType)
@@ -18,6 +19,7 @@ function findGraphByType(gType: string) {
         case 'graph': return LineGraph;
         case 'cymap': return CYMap;
         case 'map': return MapGraph;
+        case 'area': return AreaChart;
     }
 }
 

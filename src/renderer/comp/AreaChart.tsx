@@ -1,177 +1,263 @@
 import * as React from 'react';
+import { AreaClosed, Line, Bar } from '@vx/shape';
 import { Group } from '@vx/group';
-import { GlyphDot } from '@vx/glyph';
-import { LinePath } from '@vx/shape';
-import { genDateValue } from '@vx/mock-data';
+import { appleStock } from '@vx/mock-data';
+import { curveMonotoneX } from '@vx/curve';
+import { LinearGradient } from '@vx/gradient';
+import { GridRows, GridColumns } from '@vx/grid';
 import { scaleTime, scaleLinear } from '@vx/scale';
-import { curveBasis, curveMonotoneX } from '@vx/curve';
-import { extent, max, min } from 'd3-array';
+import { withTooltip, Tooltip } from '@vx/tooltip';
+import { localPoint } from '@vx/event';
+import { extent, max, bisector } from 'd3-array';
+import { timeFormat } from 'd3-time-format';
+
+
+const stock = appleStock.slice(800);
+const formatDate = timeFormat("%b %d, '%y");
+
+// accessors
+const xStock = d => new Date(d.date);
+const yStock = d => d.close;
+const bisectDate = bisector(d => new Date(d.date)).left;
+
+
 import { AxisBottom, AxisLeft } from '@vx/axis';
 
-export default function LineGraph(props){
-    console.log('LineGraph',props);
+class AreaChart extends React.Component{
+    public static defaultProps: any = {
+        width : 500,
+        height : 300,
+        margin : {left:30, top:10, right:10, bottom:30},
+        // showTooltip : null
+        // hideTooltip : null
+        // tooltipData : this.props['tooltipData'];
+        tooltipTop : 10,
+        tooltipLeft : 19,
+        // events : this.props['events'];
+    }
 
-    // bounds
-    const {width,height} = props;
-    const margin = { top: 10, bottom: 70, left: 70, right: 50 };
-    const xMax = width - margin.left - margin.right;
-    const yMax = height - margin.top - margin.bottom;
+    svg: any
 
-    // data
-    const data = props.data.rows;
+    constructor(props) {
+        super(props);
+        this.handleTooltip = this.handleTooltip.bind(this);
+    }
+    handleTooltip({ event, data, xStock, xScale, yScale }) {
+        const showTooltip = this.props['showTooltip'];
+        const { x } = localPoint(event);
+        const x0 = xScale.invert(x);
+        const index = bisectDate(data, x0, 1);
+        const d0 = data[index - 1];
+        const d1 = data[index];
+        let d = d0;
+        if (d1 && d1.date) {
+            d = x0 - xStock(d0.date) > xStock(d1.date) - x0 ? d1 : d0;
+        }
+        showTooltip({
+            tooltipData: d,
+            tooltipLeft: x,
+            tooltipTop: yScale(d.close),
+        });
+    }
+    
+    render() {
+        const width = this.props['width'];
+        const height = this.props['height'];
+        const margin = this.props['margin'];
+        const showTooltip = this.props['showTooltip'];
+        const hideTooltip = this.props['hideTooltip'];
+        const tooltipData = this.props['tooltipData'];
+        const tooltipTop = this.props['tooltipTop'];
+        const tooltipLeft = this.props['tooltipLeft'];
+        const events = this.props['events'];
+        
+        if (width < 10) return null;
 
-    // x,y setting
-    const x = d => +d.graph_time;
+        // bounds
+        const xMax = width - margin.left - margin.right;
+        const yMax = height - margin.top - margin.bottom;
 
-    let y = d => +d.current_sales;
-//    const x_2 = d => +d.current_time;
+        // scales
+        const xScale = scaleTime({
+            range: [0, xMax],
+            domain: extent(stock, xStock),
+        });
+        const yScale = scaleLinear({
+            range: [yMax, 0],
+            domain: [0, max(stock, yStock) + yMax / 3],
+            nice: true,
+        });
 
-    // current time scales
+        return (
+            <div>
+                <svg ref={s => (this.svg = s)} width={width} height={height}>
 
-    const xScale = scaleTime({
-        range: [0, xMax],
-        domain: extent(data, x),
-//        domain: [0, max(data, x)],
-//        domain: data.map(x),
-    });
+                    <defs>
+                        <linearGradient
+                            id="gradient"
+                            x1="0%"
+                            y1="0%"
+                            x2="0%"
+                            y2="100%"
+                        >
+                            <stop
+                                offset="0%"
+                                stopColor="#FFFFFF"
+                                stopOpacity={1}
+                            />
+                            <stop
+                                offset="100%"
+                                stopColor="#FFFFFF"
+                                stopOpacity={0.2}
+                            />
+                        </linearGradient>
+                    </defs>
 
-    const yScale = scaleLinear({
-        range: [yMax, 0],
-        domain: [0, max(data, y)],
-        nice: true,
-    });
+                    <AxisLeft
+                        scale={yScale}
+                        top={margin.top}
+                        left={margin.left}
+                        stroke={'#1b1a1e'}
+                        tickTextFill={'#1b1a1e'}
+                    />
+                    <AxisBottom
+                        scale={xScale}
+                        top={height - margin.bottom}
+                        left={margin.left}
+                        stroke={'#1b1a1e'}
+                        tickTextFill={'#1b1a1e'}
+                    />
 
-    // y resetting
-    y = d => d.avg_sales_amount;
+                    <Group top={margin.top} left={margin.left}>
+                        <GridRows
+                            lineStyle={{ pointerEvents: 'none' }}
+                            scale={yScale}
+                            width={xMax}
+                            strokeDasharray="2,2"
+                            stroke="rgba(255,255,255,0.3)"
+                        />
+                        <GridColumns
+                            lineStyle={{ pointerEvents: 'none' }}
+                            scale={xScale}
+                            height={yMax}
+                            strokeDasharray="2,2"
+                            stroke="rgba(255,255,255,0.3)"
+                        />
 
-    // avg sales amount scales
-//    const xScale_2 = scaleTime({
-//        range: [0, xMax],
-//        domain: extent(data, x_2),
-//    });
-    const yScale_2 = scaleLinear({
-        range: [yMax, 0],
-        domain: [0, max(data, y)],
-        nice: true,
-    });
+                        <AreaClosed
+                            data={stock}
+                            xScale={xScale}
+                            yScale={yScale}
+                            x={xStock}
+                            y={yStock}
+                            strokeWidth={1}
+                            stroke={'url(#gradient)'}
+                            fill={'url(#gradient)'}
+                            curve={curveMonotoneX}
+                        />
 
-    const tickLabel = <text fill="grey" opacity="0.20" fontSize={10} dy="0.25em" textAnchor="middle" fontWeight="bold" />
-    /*          기존 소스 임시 주석
-                <LinePath
-                    data={data}
-                    xScale={xScale}
-                    yScale={yScale}
-                    x={x}
-                    y={y}
-                    stroke='#7e20dc'
-                    strokeWidth={2}
-                    strokeDasharray='2,2'
-                    curve={curveBasis}
-                />
-     */
-    return (
-        <svg width={width} height={height}>
-            <rect
-                x={0}
-                y={0}
-                width={width}
-                height={height}
-                fill="#FFFFFF"
-                rx={14}
-            />
-            <Group top={margin.top} left={margin.left}>
-                <AxisLeft
-                    scale={yScale}
-                    top={margin.top}
-                    stroke={'#1b1a1e'}
-                    tickTextFill={'#1b1a1e'}
-                    tickLabelComponent={tickLabel}
-                />
-                <AxisBottom
-                    scale={xScale}
-                    top={height - margin.bottom}
-                    //                    tickFormat = {x.tickFormat("%m/%d")}
-                    numTicks={4}
-                    stroke={'#1b1a1e'}
-                    tickTextFill={'#1b1a1e'}
-                />
-                <LinePath
-                    data={data}
-                    xScale={xScale}
-                    yScale={yScale}
-                    x={x}
-                    y={y}
-                    stroke='#7e20dc'
-                    strokeWidth={3}
-                    curve={curveMonotoneX}
-                    glyph={(d,i) => {
-                        return (
-                            <g key={`line-point-${i}`}>
-                                <GlyphDot
-                                    cx={xScale(x(d))}
-                                    cy={yScale(y(d))}
-                                    r={6}
-                                    fill='#fff'
-                                    stroke='#01f2ff'
-                                    strokeWidth={10}
+                        <Bar
+                            x={0}
+                            y={0}
+                            width={width}
+                            height={height}
+                            fill="transparent"
+                            rx={14}
+                            data={stock}
+                            onTouchStart={data => event =>
+                                this.handleTooltip({
+                                    event,
+                                    data,
+                                    xStock,
+                                    xScale,
+                                    yScale,
+                                })}
+                            onTouchMove={data => event =>
+                                this.handleTooltip({
+                                    event,
+                                    data,
+                                    xStock,
+                                    xScale,
+                                    yScale,
+                                })}
+                            onMouseMove={data => event =>
+                                this.handleTooltip({
+                                    event,
+                                    data,
+                                    xStock,
+                                    xScale,
+                                    yScale,
+                                })}
+                            onMouseLeave={data => event => hideTooltip()}
+                        />
+                        {tooltipData && (
+                            <g>
+                                <Line
+                                    from={{ x: tooltipLeft, y: 0 }}
+                                    to={{ x: tooltipLeft, y: yMax }}
+                                    stroke="rgba(92, 119, 235, 1.000)"
+                                    strokeWidth={2}
+                                    style={{ pointerEvents: 'none' }}
+                                    strokeDasharray="2,2"
                                 />
-                                <GlyphDot
-                                    cx={xScale(x(d))}
-                                    cy={yScale(y(d))}
-                                    r={6}
-                                    fill='#01f2ff'
-                                    stroke='#7e20dc'
-                                    strokeWidth={3}
-                                />
-                                <GlyphDot
-                                    cx={xScale(x(d))}
-                                    cy={yScale(y(d))}
+                                <circle
+                                    cx={tooltipLeft}
+                                    cy={tooltipTop + 1}
                                     r={4}
-                                    fill='#ffffff'
+                                    fill="black"
+                                    fillOpacity={0.1}
+                                    stroke="black"
+                                    strokeOpacity={0.1}
+                                    strokeWidth={2}
+                                    style={{ pointerEvents: 'none' }}
+                                />
+                                <circle
+                                    cx={tooltipLeft}
+                                    cy={tooltipTop}
+                                    r={4}
+                                    fill="rgba(92, 119, 235, 1.000)"
+                                    stroke="white"
+                                    strokeWidth={2}
+                                    style={{ pointerEvents: 'none' }}
                                 />
                             </g>
-                        );
-                    }}
-                />
-                <LinePath
-                    data={data}
-                    xScale={xScale}
-                    yScale={yScale_2}
-                    x={x}
-                    y={y}
-                    stroke='#FF0000'
-                    strokeWidth={3}
-                    curve={curveMonotoneX}
-                    glyph={(d,i) => {
-                        return (
-                            <g key={`line-point-${i}`}>
-                                <GlyphDot
-                                    cx={xScale(x(d))}
-                                    cy={yScale_2(y(d))}
-                                    r={6}
-                                    fill='#fff'
-                                    stroke='#01f2ff'
-                                    strokeWidth={10}
-                                />
-                                <GlyphDot
-                                    cx={xScale(x(d))}
-                                    cy={yScale_2(y(d))}
-                                    r={6}
-                                    fill='#01f2ff'
-                                    stroke='#7e20dc'
-                                    strokeWidth={3}
-                                />
-                                <GlyphDot
-                                    cx={xScale(x(d))}
-                                    cy={yScale_2(y(d))}
-                                    r={4}
-                                    fill='#ffffff'
-                                />
-                            </g>
-                        );
-                    }}
-                />
-            </Group>
-        </svg>
-    );
+                        )}
+
+                    </Group>
+
+
+
+
+
+
+                </svg>
+                {tooltipData && (
+                    <div>
+                        <Tooltip
+                            top={tooltipTop - 12}
+                            left={tooltipLeft + 12}
+                            style={{
+                                backgroundColor: 'rgba(92, 119, 235, 1.000)',
+                                color: 'white',
+                            }}
+                        >
+                            {`$${yStock(tooltipData)}`}
+                        </Tooltip>
+                        <Tooltip
+                            top={yMax - 14}
+                            left={tooltipLeft}
+                            style={{
+                                transform: 'translateX(-50%)',
+                            }}
+                        >
+                            {formatDate(xStock(tooltipData))}
+                        </Tooltip>
+                    </div>
+                )}
+            </div>
+        );
+    }
 }
+
+
+export default withTooltip(AreaChart)

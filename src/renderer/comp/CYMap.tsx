@@ -11,6 +11,7 @@ import ol_source_Stamen from 'ol/source/stamen';
 import ol_source_Vector from 'ol/source/vector';
 import ol_layer_Heatmap from 'ol/layer/heatmap'
 import ol_geom_Point from 'ol/geom/point'
+import ol_geom_Circle from 'ol/geom/circle'
 import ol_format_GeoJSON from 'ol/format/geojson'
 
 import ol_View from 'ol/view';
@@ -172,16 +173,16 @@ export class  CYMap extends React.Component {
 
         var sourceVector = new ol_source_Vector({
             // features: (new ol_format_GeoJSON()).readFeatures(geojson2)
-        })
-
-        var sv = new ol_source_Vector({
-            // format: new ol_format_GeoJSON({defaultDataProjection: 'EPSG:3857'}),
-            format: new ol_format_GeoJSON(),
-            // format: new ol_format_GeoJSON({defaultDataProjection: 'EPSG:4326'}),
-            loader: function (extent, resolution, projection) {
-                sv.addFeatures(sv.getFormat().readFeatures(geojson2,{dataProjection:'EPSG:4326', featureProjection:'EPSG:3857'}));
-            },
         });
+
+        // var sv = new ol_source_Vector({
+        //     // format: new ol_format_GeoJSON({defaultDataProjection: 'EPSG:3857'}),
+        //     format: new ol_format_GeoJSON(),
+        //     // format: new ol_format_GeoJSON({defaultDataProjection: 'EPSG:4326'}),
+        //     loader: function (extent, resolution, projection) {
+        //         sv.addFeatures(sv.getFormat().readFeatures(geojson2,{dataProjection:'EPSG:4326', featureProjection:'EPSG:3857'}));
+        //     },
+        // });
 
         this.props.data.nodes.forEach((n)=> {
             if(n.labels[0] !== 'station') return;
@@ -193,12 +194,18 @@ export class  CYMap extends React.Component {
             sourceVector.addFeature(feature)
         });
 
+        sourceVector.addFeature(new ol_Feature({
+            geometry: new ol_geom_Circle(ol_Proj.transform([126.717850, 35.013243], 'EPSG:4326','EPSG:3857'),100)
+        }))
+
 
         var vector = new ol_layer_Heatmap({
             source: sourceVector,
             blur: 50,
             radius: 10
         });
+
+        // vector.addFeature(new ol_Feature())
 
         this.map = new ol_Map({
             layers: [
@@ -210,9 +217,9 @@ export class  CYMap extends React.Component {
                 vector
             ],
             view: new ol_View({
-                center: ol_Proj.fromLonLat([0.717850, 35.013243]),
-                // center: ol_Proj.fromLonLat([126.717850, 35.013243]),
-                zoom: 3
+                // center: ol_Proj.fromLonLat([0.717850, 35.013243]),
+                center: ol_Proj.fromLonLat([126.717850, 35.013243]),
+                zoom: 14
             })
         });
 
@@ -263,9 +270,8 @@ export class  CYMap extends React.Component {
             }
         };
 
-
         this.map.addLayer(overlay);
-        console.log('sssssssssssssssss')
+        console.log('sss')
     }
 
     componentWillUpdate() {

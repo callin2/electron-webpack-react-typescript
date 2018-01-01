@@ -67,7 +67,7 @@ class ChartContainer extends React.Component<ChartContainerProp,{}> {
     }
 
     componentWillReceiveProps(newProps) {
-        console.error('componentWillReceiveProps', newProps)
+        // console.error('componentWillReceiveProps', newProps)
         this.store.layoutList = newProps.layout
     }
 

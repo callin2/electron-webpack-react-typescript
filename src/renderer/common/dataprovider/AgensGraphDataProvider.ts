@@ -164,7 +164,7 @@ export class AGraphDataProvider extends DynamicGraphDataProvider {
                 console.log('result', err, result);
 
                 if (err) {
-                    reject(err)
+                    return reject(err)
                 }
 
                 var graphData = {nodes:[], edges:[]}
