@@ -7,6 +7,7 @@ export function DataGrid(props) {
     console.log('DataGrid', props)
 
     return (
+            
         <div>
             <table style={{border:1, borderColor:'black', backgroundColor:'white'}}>
                 <thead>

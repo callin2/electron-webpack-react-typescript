@@ -24,7 +24,7 @@ export function BarGraph(props) {
     if(xMax < 1 || yMax < 1) return null;
 
 // We'll make some helpers to get at the data we want
-    const x = d => +d.time;
+    const x = d => +d.time.substring(4,10);
     const y = d => +d.charge_amount_at_the_time;
 
 // And then scale the graph by our data
@@ -47,6 +47,20 @@ export function BarGraph(props) {
 
     return (
         <svg width={props.width} height={props.height}>
+            <AxisLeft
+                scale={yScale}
+                top={margin.top}
+                left={margin.left}
+                stroke={'#1b1a1e'}
+                tickTextFill={'#1b1a1e'}
+             />
+             <AxisBottom
+                scale={xScale}
+                top={height - margin.bottom}
+                left={margin.left}
+                stroke={'#1b1a1e'}
+                tickTextFill={'#1b1a1e'}
+              />
             {data.map((d, i) => {
                 const barHeight = yMax - yPoint(d);
                 return (
