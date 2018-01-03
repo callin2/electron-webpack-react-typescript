@@ -1,8 +1,6 @@
 import * as React from "react";
 import * as echarts from "echarts";
 
-debugger
-
 class Echarts extends React.Component {
 
     option = {
