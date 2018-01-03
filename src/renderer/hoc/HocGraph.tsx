@@ -9,6 +9,8 @@ import MapGraph from "../comp/MapGraph";
 import {DataGrid} from "../comp/DataGrid";
 import {CYMap} from "../comp/CYMap";
 import AreaChart from "../comp/AreaChart";
+import NumberChart from "../comp/NumberChart";
+import ECharts from "../comp/ECharts";
 
 function findGraphByType(gType: string) {
     console.log('gType', gType)
@@ -20,6 +22,8 @@ function findGraphByType(gType: string) {
         case 'cymap': return CYMap;
         case 'map': return MapGraph;
         case 'area': return AreaChart;
+        case 'number': return NumberChart;
+        case 'echarts': return ECharts;
     }
 }
 
@@ -49,7 +53,7 @@ export default function HocGraph(props) {
         console.log('propxxs', p);
 
         var dataProvider = new AGraphDataProvider()
-        return dataProvider.configure(config)
+        return dataProvider.configure(config_local)
             .then((prv)=>prv.connect())
             .then((prv)=>prv.queryPromise(props.dataset.query))
 
