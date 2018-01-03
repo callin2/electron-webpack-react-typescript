@@ -15,7 +15,7 @@ class PieChart extends React.Component {
        },
        series: [
            {
-               name:'访问来源',
+               name:'EVEHICLE_MODEL_INFORMATION',
                type:'pie',
                radius: ['50%', '70%'],
                avoidLabelOverlap: false,
@@ -27,7 +27,7 @@ class PieChart extends React.Component {
                    emphasis: {
                        show: true,
                        textStyle: {
-                           fontSize: '30',
+                           fontSize: '18',
                            fontWeight: 'bold'
                        }
                    }
@@ -48,17 +48,17 @@ class PieChart extends React.Component {
        ]
     };
 
-    private divElem: any
-    private pieChart: any
+    private _divElem:any
+    private pieChart:any
 
     componentDidMount() {
-        this.pieChart = echarts.init(this.divElem)
+        this.pieChart = echarts.init(this._divElem)
         this.pieChart.setOption(this.option, true)
     }
 
 
     render() {
-        return <div ref={div=>this.divElem=div} style={{height:'100%'}}>
+        return <div ref={divElem=>this._divElem=divElem} style={{height:'100%'}}>
         </div>
     }
 

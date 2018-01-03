@@ -96,7 +96,6 @@ class TestChart extends React.Component {
 	}
 
 
-
 	render() {
 		return <div ref={divElem=>this._divElem=divElem} style={{height:'100%'}}>
 		</div>

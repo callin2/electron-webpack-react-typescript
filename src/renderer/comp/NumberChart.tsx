@@ -1,34 +1,43 @@
 import * as React from 'react';
+import * as echarts from "echarts";
 
-
-// Finally we'll embed it all in an SVG
-export default function NumberChart(props) {
-
+class NumberChart extends React.Component {
     
-    options = {
+    option = {
+        tooltip : {
+            formatter: "{a} <br/>{b} : {c}%"
+        },
+        toolbox: {
+            feature: {
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        series: [
+            {
+                name: 'DETAIL',
+                type: 'gauge',
+                detail: {formatter:'{value}'},
+                data: [{value: 72, name: 'MyValue'}]
+            }
+        ]
+    };
 
-    
-    }
+    private _divElem:any
+    private myChart:any
 
     componentDidMount() {
-        this.myChart = echarts.init(this.divElem)
+        this.myChart = echarts.init(this._divElem)
         this.myChart.setOption(this.option, true)
     }
 
 
     render() {
-        return <div ref={div=>this.divElem=div} style={{height:'100%'}}>
+        return <div ref={divElem=>this._divElem=divElem} style={{height:'100%'}}>
         </div>
     }
 
-
-    componentWillReceiveProps(prevProp, nextProp) {
-        console.log('componentWillReceiveProps', prevProp, nextProp)
-    }
 }
 
-
-export default Echarts;
-}
-
+export default NumberChart;
 

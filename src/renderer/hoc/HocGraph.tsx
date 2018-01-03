@@ -12,6 +12,7 @@ import AreaChart from "../comp/AreaChart";
 import NumberChart from "../comp/NumberChart";
 import ECharts from "../comp/ECharts";
 import TestChart from "../comp/TestChart";
+import PieChart from "../comp/PieChart"
 
 
 function findGraphByType(gType: string) {
@@ -27,7 +28,7 @@ function findGraphByType(gType: string) {
         case 'number': return NumberChart;
         case 'echarts': return ECharts;
         case 'test': return TestChart;
-        
+        case 'pie' : return PieChart;
     }
 }
 
