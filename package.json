@@ -42,14 +42,10 @@
     "@vx/shape": "0.0.147",
     "@vx/tooltip": "0.0.148",
     "agensgraph": "git+https://github.com/callin2/agensgraph-nodejs.git",
-<<<<<<< HEAD
-    "echarts": "^3.8.5",
     "echarts-for-react": "^2.0.4",
-=======
     "cytoscape": "^3.2.7",
     "d3": "^4.12.2",
     "echarts": "^3.8.5",
->>>>>>> f50ee5867c8e3eec15fd0f3e78cd84756f710477
     "glamorous": "^4.11.2",
     "google-map-react": "^0.25.0",
     "i": "^0.3.6",
