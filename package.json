@@ -41,6 +41,8 @@
     "@vx/scale": "0.0.143",
     "@vx/shape": "0.0.147",
     "agensgraph": "git+https://github.com/callin2/agensgraph-nodejs.git",
+    "echarts": "^3.8.5",
+    "echarts-for-react": "^2.0.4",
     "glamorous": "^4.11.2",
     "google-map-react": "^0.25.0",
     "i": "^0.3.6",

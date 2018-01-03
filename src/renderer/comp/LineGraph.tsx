@@ -7,6 +7,7 @@ import { scaleTime, scaleLinear } from '@vx/scale';
 import { curveBasis, curveMonotoneX } from '@vx/curve';
 import { extent, max, min } from 'd3-array';
 import { AxisBottom, AxisLeft } from '@vx/axis';
+import * as d3 from 'd3-time-format';
 
 // accessors
 //export default ({
@@ -14,8 +15,11 @@ import { AxisBottom, AxisLeft } from '@vx/axis';
 //                    height=400,
 //                    margin={left:10, right:10, top:10, bottom:10},
 //                }, props) => {
+
 export default function LineGraph(props){
     console.log('LineGraph',props);
+    
+//    const format = d3.time.format("%Y%m%d");
     
     // bounds
     const {width,height} = props;
@@ -33,14 +37,21 @@ export default function LineGraph(props){
 //    const x_2 = d => +d.current_time;
     
     // current time scales
-    
     const xScale = scaleTime({
         range: [0, xMax],
         domain: extent(data, x),
+//          domain: ([new Date(2017, 11, 26), new Date(2017, 11, 29)]),
+//          domain: (format.parse(x), new Date(2017, 11, 29)]),
 //        domain: [0, max(data, x)],
 //        domain: data.map(x),
     });
-    
+  
+
+/*
+    const xScale = d3.time.scale()
+                    .domain(extent(x))
+                    .range([0, xMax]);
+*/
     const yScale = scaleLinear({
         range: [yMax, 0],
         domain: [0, max(data, y)],
@@ -96,7 +107,8 @@ export default function LineGraph(props){
                  <AxisBottom
                     scale={xScale}
                     top={height - margin.bottom}
-//                    tickFormat = {x.tickFormat("%m/%d")}
+//                    tickFormat={(value, index) => `$${value}`}
+                    tickFormat = {d3.timeFormat('%Y/%m/%d')}
                     numTicks={4}
                     stroke={'#1b1a1e'}
                     tickTextFill={'#1b1a1e'}
