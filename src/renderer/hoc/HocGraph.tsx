@@ -14,6 +14,9 @@ import ECharts from "../comp/ECharts";
 import TestChart from "../comp/TestChart";
 import BarGraph1 from "../comp/BarGraph1";
 import LineGraph1 from "../comp/LineGraph1";
+import PieChart from "../comp/PieChart";
+import TestGrid from "../comp/TestGrid";
+
 
 function findGraphByType(gType: string) {
     console.log('gType', gType)
@@ -30,6 +33,8 @@ function findGraphByType(gType: string) {
         case 'test': return TestChart;
         case 'bar1': return BarGraph1;
         case 'line1': return LineGraph1;
+        case 'pie' : return PieChart;
+        case 'testgrid': return TestGrid;
     }
 }
 

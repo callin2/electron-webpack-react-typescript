@@ -1,11 +1,8 @@
 import * as React from 'react';
 
-
-// Finally we'll embed it all in an SVG
 export function DataGrid(props) {
 
     console.log('DataGrid', props)
-
     return (
             
         <div>
