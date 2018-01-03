@@ -102,5 +102,4 @@ class TestChart extends React.Component {
 	}
 	
 }
-
 export default TestChart

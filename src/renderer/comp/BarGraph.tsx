@@ -5,6 +5,7 @@ import { Bar } from '@vx/shape';
 import { scaleLinear, scaleBand } from '@vx/scale';
 import { AxisLeft, AxisBottom } from '@vx/axis';
 import { GradientOrangeRed } from '@vx/gradient';
+import ReactEcharts from 'echarts-for-react';
 
 // We'll use some mock data from `@vx/mock-data` for this.
 // const data = letterFrequency;
@@ -36,6 +37,7 @@ export function BarGraph(props) {
     const yScale = scaleLinear({
         rangeRound: [yMax, 0],
         domain: [0, Math.max(...data.map(y))],
+        nice: true,
     });
 
 // Compose together the scale and accessor functions to get point functions
@@ -47,6 +49,8 @@ export function BarGraph(props) {
 
     return (
         <svg width={props.width} height={props.height}>
+            
+            <Group bottom={margin.bottom} left={margin.left}>
             <AxisLeft
                 scale={yScale}
                 top={margin.top}
@@ -75,6 +79,7 @@ export function BarGraph(props) {
                     </Group>
                 );
             })}
+            </Group>
         </svg>
     );
 }
