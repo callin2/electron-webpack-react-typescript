@@ -10,7 +10,9 @@ import {observer} from "mobx-react";
 
 interface ChartContainerProp {
     layout?: any
+    params?: any
 }
+
 
 export interface LayoutInfo {
     chartType: string
@@ -65,12 +67,12 @@ class ChartContainer extends React.Component<ChartContainerProp,{}> {
     }
 
     componentWillReceiveProps(newProps) {
-        console.error('componentWillReceiveProps', newProps)
+        // console.error('componentWillReceiveProps', newProps)
         this.store.layoutList = newProps.layout
     }
 
     handleLayoutChange(layout, layouts) {
-        console.log(layout, layouts)
+        // console.log(layout, layouts)
     }
 
     render() {

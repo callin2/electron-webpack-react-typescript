@@ -32,7 +32,7 @@ var config = {
     module: {
         rules: [
             {
-                test: /\.(eot|svg|ttf|woff|woff2|png)$/,
+                test: /\.(eot|svg|ttf|woff|woff2|png|jpg)$/,
                 loader: 'file-loader?name=public/asset/[name].[ext]'
             },
             {

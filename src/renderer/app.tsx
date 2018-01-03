@@ -18,6 +18,7 @@ import FirstPage from "./page/first";
 import SecondPage from "./page/second";
 
 import ThirdPage from "./page/third";
+import {TestPage} from "./page/testpage";
 
 class App extends React.Component {
     constructor(props) {
@@ -30,6 +31,7 @@ class App extends React.Component {
                 <Route exact path="/" component={FirstPage}/>
                 <Route exact path="/hello/" component={SecondPage}/>
                 <Route exact path="/3/" component={ThirdPage}/>
+                {/*<Route component={TestPage}/>*/}
                 <Route component={ThirdPage}/>
             </Switch>
         </Router>
