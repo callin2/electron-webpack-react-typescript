@@ -91,9 +91,9 @@ const LayoutConfig = {
 
     ],
     'E-Charger': [
-        {chartType:'test', title:'echarts Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:1, y:0, w:4, h: 7 , minW:2, minH:3}},
+        {chartType:'line1', title:'echarts Bar Chart', dataset: DataSetList['lineDs'], bounds: {x:1, y:0, w:4, h: 7 , minW:2, minH:3}},
         {chartType:'area', title:'22 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:1, y:0, w:4, h: 7 , minW:2, minH:3}},
-        {chartType:'bar', title:'22 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:1, y:0, w:4, h: 9 , minW:2, minH:3}},
+        {chartType:'bar1', title:'echarts Custom Bar Chart', dataset: DataSetList['barDs'], bounds: {x:1, y:0, w:4, h: 9 , minW:2, minH:3}},
     ],
     'ETC': [
         {chartType:'map', title:'11 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:0, y:0, w:6, h: 9 , minW:2, minH:3, static: true}},
