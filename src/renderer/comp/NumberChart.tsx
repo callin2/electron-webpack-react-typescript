@@ -4,15 +4,31 @@ import * as React from 'react';
 // Finally we'll embed it all in an SVG
 export default function NumberChart(props) {
 
-    console.log('DataGrid', props)
+    
+    options = {
 
-    return (
+    
+    }
 
-        <div>
-            <h1>{props.data}</h1>
-            <p>{props.description}</p>
+    componentDidMount() {
+        this.myChart = echarts.init(this.divElem)
+        this.myChart.setOption(this.option, true)
+    }
+
+
+    render() {
+        return <div ref={div=>this.divElem=div} style={{height:'100%'}}>
         </div>
-    );
+    }
+
+
+    componentWillReceiveProps(prevProp, nextProp) {
+        console.log('componentWillReceiveProps', prevProp, nextProp)
+    }
+}
+
+
+export default Echarts;
 }
 
 

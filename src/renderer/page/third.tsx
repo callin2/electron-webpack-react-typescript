@@ -10,8 +10,6 @@ import 'react-dates/lib/css/_datepicker.css';
 import 'react-dates/initialize';
 
 
-
-
 var query = `select a.time AS time, a.total_charge_amount AS charge_amount_at_the_time from (
     match (n:station)-[r:transaction]->(m:echarger)
     where r.ec_charge_start_time > '20171226100000'
@@ -91,9 +89,10 @@ const LayoutConfig = {
 
     ],
     'E-Charger': [
-        {chartType:'echarts', title:'echarts Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:1, y:0, w:4, h: 7 , minW:2, minH:3}},
+        {chartType:'test', title:'echarts Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:1, y:0, w:4, h: 7 , minW:2, minH:3}},
         {chartType:'area', title:'22 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:1, y:0, w:4, h: 7 , minW:2, minH:3}},
         {chartType:'bar', title:'22 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:1, y:0, w:4, h: 9 , minW:2, minH:3}},
+      //  {chartType:'pie', title:'Pie Chart', dataset: DataSetList['sampleDs'], bounds: {x:1, y:0, w:4, h: 7 , minW:2, minH:3}},
     ],
     'ETC': [
         {chartType:'map', title:'11 Bar Chart', dataset: DataSetList['sampleDs'], bounds: {x:0, y:0, w:6, h: 9 , minW:2, minH:3, static: true}},
